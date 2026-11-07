@@ -1,0 +1,1189 @@
+
+<!-- saved from url=(0259)https://376739896-atari-embeds.googleusercontent.com/embeds/519e65e0e56fcef24f03f43ae5831795/inner-frame-minified.html?jsh=m%3B%2F_%2Fscs%2Fabc-static%2F_%2Fjs%2Fk%3Dgapi.lb.ar.Fz9k4UNIKqY.O%2Fd%3D1%2Frs%3DAHpOoo_fzwzCgmvJSmZvqLLh25EA1v7syw%2Fm%3D__features__ -->
+<html lang="ar" dir="rtl"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><!--<base href="https://376739896-atari-embeds.googleusercontent.com/embeds/519e65e0e56fcef24f03f43ae5831795/inner-frame-minified.html?jsh=m%3B%2F_%2Fscs%2Fabc-static%2F_%2Fjs%2Fk%3Dgapi.lb.ar.Fz9k4UNIKqY.O%2Fd%3D1%2Frs%3DAHpOoo_fzwzCgmvJSmZvqLLh25EA1v7syw%2Fm%3D__features__" target="_blank">--><base href="." target="_blank">
+      <script>
+        (function() {
+          // Listen during capturing phase to intercept before <base target="_blank"> takes effect.
+          document.addEventListener('click', function(e) {
+            // Find the nearest ancestor anchor (handles nested icons, spans, svgs).
+            var el = e.target;
+            var anchor = null;
+            while (el && el !== document) {
+              if (el.tagName && el.tagName.toLowerCase() === 'a') {
+                anchor = el;
+                break;
+              }
+              el = el.parentElement;
+            }
+            if (!anchor) return;
+
+            // Only intercept relative in-page fragment links, not external links with hashes.
+            var href = anchor.getAttribute('href');
+            if (!href) return;
+            href = href.trim();
+            if (!href.startsWith('#')) return;
+
+            // Prevent default <base target="_blank"> navigation to a new blank tab.
+            e.preventDefault();
+            e.stopPropagation();
+
+            // Handle empty anchor or top anchor.
+            if (href === '#' || href === '#top') {
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+              return;
+            }
+
+            // Resolve target element by id, falling back to legacy name attribute.
+            var targetId = href.slice(1);
+            try {
+              targetId = decodeURIComponent(targetId);
+            } catch (err) {}
+
+            var targetEl = document.getElementById(targetId);
+            if (!targetEl) {
+              try {
+                var escaped = window.CSS && CSS.escape ? CSS.escape(targetId) : targetId.replace(/["\\]/g, '\\$&');
+                targetEl = document.querySelector('[name="' + escaped + '"]');
+              } catch (err) {}
+            }
+
+            // Smoothly scroll to the target within the embed and update URL hash history.
+            if (targetEl) {
+              targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              if (window.history && window.history.pushState) {
+                window.history.pushState(null, '', href);
+              }
+            }
+          }, true); // useCapture: true is critical to preempt <base target="_blank">
+        })();
+      </script>
+    
+
+
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مشروع كشف الأعطال في الكيبلات الأرضية TDR</title>
+    <!-- Tajawal & JetBrains Mono Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com/">
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+    <link href="./css2" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="./all.min.css">
+    <!-- Chart.js Engine + Plugins -->
+    <script src="./chart.umd.min.js.download"></script>
+    <script src="./chartjs-plugin-annotation.min.js.download"></script>
+    <script src="./chartjs-plugin-zoom.min.js.download"></script>
+    <!-- Tailwind CSS CDN -->
+    <script src="./saved_resource"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        dark: {
+                            base: '#070a12',
+                            card: '#0f172a',
+                            border: '#1e293b',
+                            hover: '#1e293b'
+                        },
+                        neon: {
+                            blue: '#38bdf8',
+                            green: '#10b981',
+                            red: '#ef4444',
+                            amber: '#f59e0b',
+                            purple: '#a855f7'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Tajawal', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom UI Enhancements & Print Styles */
+        body {
+            background-color: #070a12;
+            color: #f8fafc;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(56, 189, 248, 0.05) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(239, 68, 68, 0.05) 0px, transparent 50%);
+            background-attachment: fixed;
+        }
+
+        /* Custom Scrollbars */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #070a12; }
+        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #38bdf8; }
+
+        /* Glassmorphism Card Effect */
+        .glass-card {
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(30, 41, 59, 0.8);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        .glow-blue { box-shadow: 0 0 15px rgba(56, 189, 248, 0.25); }
+        .glow-green { box-shadow: 0 0 15px rgba(16, 185, 129, 0.25); }
+        .glow-red { box-shadow: 0 0 15px rgba(239, 68, 68, 0.25); }
+
+        /* Pulse animations for status dots */
+        @keyframes pulse-fast {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.9); }
+        }
+        .animate-pulse-fast { animation: pulse-fast 1.2s infinite ease-in-out; }
+
+        /* Print Media Stylesheet */
+        @media print {
+            body { background: white !important; color: black !important; font-family: 'Tajawal', sans-serif !important; }
+            .no-print { display: none !important; }
+            .print-only { display: block !important; }
+            .glass-card { background: none !important; border: 1px solid #ccc !important; box-shadow: none !important; color: black !important; }
+            .text-neon-blue, .text-neon-green, .text-neon-red, .text-neon-amber { color: #1e293b !important; }
+            .chart-container-print { height: 350px !important; width: 100% !important; page-break-inside: avoid; }
+            header { border-bottom: 2px solid #000 !important; }
+        }
+    </style>
+<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:Tajawal, sans-serif;font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:JetBrains Mono, monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.relative{position:relative}.sticky{position:sticky}.top-0{top:0px}.z-50{z-index:50}.mx-auto{margin-left:auto;margin-right:auto}.my-1{margin-top:0.25rem;margin-bottom:0.25rem}.mb-1{margin-bottom:0.25rem}.mb-2{margin-bottom:0.5rem}.mb-3{margin-bottom:0.75rem}.mb-4{margin-bottom:1rem}.mt-0\.5{margin-top:0.125rem}.mt-2{margin-top:0.5rem}.mt-3{margin-top:0.75rem}.mt-8{margin-top:2rem}.block{display:block}.inline-block{display:inline-block}.flex{display:flex}.inline-flex{display:inline-flex}.grid{display:grid}.hidden{display:none}.h-2{height:0.5rem}.h-3{height:0.75rem}.h-4{height:1rem}.min-h-\[380px\]{min-height:380px}.min-h-screen{min-height:100vh}.w-2{width:0.5rem}.w-3{width:0.75rem}.w-full{width:100%}.w-px{width:1px}.max-w-\[1700px\]{max-width:1700px}.flex-1{flex:1 1 0%}.cursor-pointer{cursor:pointer}.grid-cols-1{grid-template-columns:repeat(1, minmax(0, 1fr))}.grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-center{align-items:center}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-1{gap:0.25rem}.gap-1\.5{gap:0.375rem}.gap-2{gap:0.5rem}.gap-2\.5{gap:0.625rem}.gap-3{gap:0.75rem}.gap-4{gap:1rem}.gap-5{gap:1.25rem}.gap-6{gap:1.5rem}.space-y-3 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.75rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.75rem * var(--tw-space-y-reverse))}.space-y-4 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem * var(--tw-space-y-reverse))}.divide-y > :not([hidden]) ~ :not([hidden]){--tw-divide-y-reverse:0;border-top-width:calc(1px * calc(1 - var(--tw-divide-y-reverse)));border-bottom-width:calc(1px * var(--tw-divide-y-reverse))}.divide-dark-border > :not([hidden]) ~ :not([hidden]){--tw-divide-opacity:1;border-color:rgb(30 41 59 / var(--tw-divide-opacity, 1))}.overflow-hidden{overflow:hidden}.overflow-x-auto{overflow-x:auto}.rounded{border-radius:0.25rem}.rounded-2xl{border-radius:1rem}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:0.5rem}.rounded-xl{border-radius:0.75rem}.rounded-l-lg{border-top-left-radius:0.5rem;border-bottom-left-radius:0.5rem}.rounded-r-lg{border-top-right-radius:0.5rem;border-bottom-right-radius:0.5rem}.border{border-width:1px}.border-b{border-bottom-width:1px}.border-b-2{border-bottom-width:2px}.border-t{border-top-width:1px}.border-t-2{border-top-width:2px}.border-amber-500\/20{border-color:rgb(245 158 11 / 0.2)}.border-blue-500\/20{border-color:rgb(59 130 246 / 0.2)}.border-blue-500\/30{border-color:rgb(59 130 246 / 0.3)}.border-dark-border{--tw-border-opacity:1;border-color:rgb(30 41 59 / var(--tw-border-opacity, 1))}.border-emerald-500\/20{border-color:rgb(16 185 129 / 0.2)}.border-neon-blue\/30{border-color:rgb(56 189 248 / 0.3)}.border-purple-500\/20{border-color:rgb(168 85 247 / 0.2)}.border-purple-500\/30{border-color:rgb(168 85 247 / 0.3)}.border-red-500\/20{border-color:rgb(239 68 68 / 0.2)}.border-red-500\/30{border-color:rgb(239 68 68 / 0.3)}.border-slate-700{--tw-border-opacity:1;border-color:rgb(51 65 85 / var(--tw-border-opacity, 1))}.border-slate-800{--tw-border-opacity:1;border-color:rgb(30 41 59 / var(--tw-border-opacity, 1))}.border-slate-900{--tw-border-opacity:1;border-color:rgb(15 23 42 / var(--tw-border-opacity, 1))}.border-t-amber-400{--tw-border-opacity:1;border-top-color:rgb(251 191 36 / var(--tw-border-opacity, 1))}.border-t-emerald-400{--tw-border-opacity:1;border-top-color:rgb(52 211 153 / var(--tw-border-opacity, 1))}.border-t-neon-blue{--tw-border-opacity:1;border-top-color:rgb(56 189 248 / var(--tw-border-opacity, 1))}.border-t-purple-400{--tw-border-opacity:1;border-top-color:rgb(192 132 252 / var(--tw-border-opacity, 1))}.bg-amber-500\/10{background-color:rgb(245 158 11 / 0.1)}.bg-blue-500\/10{background-color:rgb(59 130 246 / 0.1)}.bg-blue-600\/20{background-color:rgb(37 99 235 / 0.2)}.bg-emerald-500\/10{background-color:rgb(16 185 129 / 0.1)}.bg-emerald-600{--tw-bg-opacity:1;background-color:rgb(5 150 105 / var(--tw-bg-opacity, 1))}.bg-neon-blue{--tw-bg-opacity:1;background-color:rgb(56 189 248 / var(--tw-bg-opacity, 1))}.bg-neon-blue\/10{background-color:rgb(56 189 248 / 0.1)}.bg-purple-400{--tw-bg-opacity:1;background-color:rgb(192 132 252 / var(--tw-bg-opacity, 1))}.bg-purple-500\/10{background-color:rgb(168 85 247 / 0.1)}.bg-purple-600\/20{background-color:rgb(147 51 234 / 0.2)}.bg-red-500{--tw-bg-opacity:1;background-color:rgb(239 68 68 / var(--tw-bg-opacity, 1))}.bg-red-500\/10{background-color:rgb(239 68 68 / 0.1)}.bg-red-500\/20{background-color:rgb(239 68 68 / 0.2)}.bg-red-600\/20{background-color:rgb(220 38 38 / 0.2)}.bg-slate-700{--tw-bg-opacity:1;background-color:rgb(51 65 85 / var(--tw-bg-opacity, 1))}.bg-slate-800{--tw-bg-opacity:1;background-color:rgb(30 41 59 / var(--tw-bg-opacity, 1))}.bg-slate-900{--tw-bg-opacity:1;background-color:rgb(15 23 42 / var(--tw-bg-opacity, 1))}.bg-slate-900\/50{background-color:rgb(15 23 42 / 0.5)}.bg-slate-900\/80{background-color:rgb(15 23 42 / 0.8)}.bg-slate-900\/90{background-color:rgb(15 23 42 / 0.9)}.bg-slate-950{--tw-bg-opacity:1;background-color:rgb(2 6 23 / var(--tw-bg-opacity, 1))}.bg-slate-950\/60{background-color:rgb(2 6 23 / 0.6)}.bg-gradient-to-l{background-image:linear-gradient(to left, var(--tw-gradient-stops))}.bg-gradient-to-r{background-image:linear-gradient(to right, var(--tw-gradient-stops))}.from-blue-600{--tw-gradient-from:#2563eb var(--tw-gradient-from-position);--tw-gradient-to:rgb(37 99 235 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-red-500{--tw-gradient-from:#ef4444 var(--tw-gradient-from-position);--tw-gradient-to:rgb(239 68 68 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.via-blue-400{--tw-gradient-to:rgb(96 165 250 / 0)  var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), #60a5fa var(--tw-gradient-via-position), var(--tw-gradient-to)}.to-blue-700{--tw-gradient-to:#1d4ed8 var(--tw-gradient-to-position)}.to-emerald-400{--tw-gradient-to:#34d399 var(--tw-gradient-to-position)}.bg-clip-text{-webkit-background-clip:text;background-clip:text}.p-2{padding:0.5rem}.p-2\.5{padding:0.625rem}.p-3{padding:0.75rem}.p-4{padding:1rem}.p-5{padding:1.25rem}.p-6{padding:1.5rem}.px-1\.5{padding-left:0.375rem;padding-right:0.375rem}.px-2{padding-left:0.5rem;padding-right:0.5rem}.px-2\.5{padding-left:0.625rem;padding-right:0.625rem}.px-3{padding-left:0.75rem;padding-right:0.75rem}.px-4{padding-left:1rem;padding-right:1rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.py-0\.5{padding-top:0.125rem;padding-bottom:0.125rem}.py-1{padding-top:0.25rem;padding-bottom:0.25rem}.py-1\.5{padding-top:0.375rem;padding-bottom:0.375rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.py-2\.5{padding-top:0.625rem;padding-bottom:0.625rem}.py-4{padding-top:1rem;padding-bottom:1rem}.pb-3{padding-bottom:0.75rem}.pt-1{padding-top:0.25rem}.pt-3{padding-top:0.75rem}.text-left{text-align:left}.text-center{text-align:center}.text-right{text-align:right}.font-mono{font-family:JetBrains Mono, monospace}.font-sans{font-family:Tajawal, sans-serif}.text-2xl{font-size:1.5rem;line-height:2rem}.text-\[10px\]{font-size:10px}.text-\[11px\]{font-size:11px}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-xs{font-size:0.75rem;line-height:1rem}.font-black{font-weight:900}.font-bold{font-weight:700}.font-medium{font-weight:500}.font-semibold{font-weight:600}.text-amber-400{--tw-text-opacity:1;color:rgb(251 191 36 / var(--tw-text-opacity, 1))}.text-emerald-400{--tw-text-opacity:1;color:rgb(52 211 153 / var(--tw-text-opacity, 1))}.text-neon-blue{--tw-text-opacity:1;color:rgb(56 189 248 / var(--tw-text-opacity, 1))}.text-purple-300{--tw-text-opacity:1;color:rgb(216 180 254 / var(--tw-text-opacity, 1))}.text-purple-400{--tw-text-opacity:1;color:rgb(192 132 252 / var(--tw-text-opacity, 1))}.text-red-400{--tw-text-opacity:1;color:rgb(248 113 113 / var(--tw-text-opacity, 1))}.text-slate-200{--tw-text-opacity:1;color:rgb(226 232 240 / var(--tw-text-opacity, 1))}.text-slate-300{--tw-text-opacity:1;color:rgb(203 213 225 / var(--tw-text-opacity, 1))}.text-slate-400{--tw-text-opacity:1;color:rgb(148 163 184 / var(--tw-text-opacity, 1))}.text-slate-500{--tw-text-opacity:1;color:rgb(100 116 139 / var(--tw-text-opacity, 1))}.text-slate-600{--tw-text-opacity:1;color:rgb(71 85 105 / var(--tw-text-opacity, 1))}.text-transparent{color:transparent}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.antialiased{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}.accent-amber-400{accent-color:#fbbf24}.accent-emerald-400{accent-color:#34d399}.accent-neon-blue{accent-color:#38bdf8}.shadow-\[0_0_10px_\#ef4444\]{--tw-shadow:0 0 10px #ef4444;--tw-shadow-colored:0 0 10px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-lg{--tw-shadow:0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.transition-all{transition-property:all;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.hover\:bg-blue-600\/30:hover{background-color:rgb(37 99 235 / 0.3)}.hover\:bg-emerald-500:hover{--tw-bg-opacity:1;background-color:rgb(16 185 129 / var(--tw-bg-opacity, 1))}.hover\:bg-neon-blue\/20:hover{background-color:rgb(56 189 248 / 0.2)}.hover\:bg-purple-600\/30:hover{background-color:rgb(147 51 234 / 0.3)}.hover\:bg-red-500\/30:hover{background-color:rgb(239 68 68 / 0.3)}.hover\:bg-red-600\/30:hover{background-color:rgb(220 38 38 / 0.3)}.hover\:bg-slate-700:hover{--tw-bg-opacity:1;background-color:rgb(51 65 85 / var(--tw-bg-opacity, 1))}.hover\:from-blue-500:hover{--tw-gradient-from:#3b82f6 var(--tw-gradient-from-position);--tw-gradient-to:rgb(59 130 246 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.hover\:to-blue-600:hover{--tw-gradient-to:#2563eb var(--tw-gradient-to-position)}.hover\:text-red-400:hover{--tw-text-opacity:1;color:rgb(248 113 113 / var(--tw-text-opacity, 1))}.focus\:border-neon-blue:focus{--tw-border-opacity:1;border-color:rgb(56 189 248 / var(--tw-border-opacity, 1))}.focus\:outline-none:focus{outline:2px solid transparent;outline-offset:2px}.disabled\:cursor-not-allowed:disabled{cursor:not-allowed}.disabled\:opacity-40:disabled{opacity:0.4}@media (min-width: 640px){.sm\:grid-cols-4{grid-template-columns:repeat(4, minmax(0, 1fr))}}@media (min-width: 768px){.md\:p-6{padding:1.5rem}.md\:text-2xl{font-size:1.5rem;line-height:2rem}}@media (min-width: 1024px){.lg\:col-span-4{grid-column:span 4 / span 4}.lg\:col-span-8{grid-column:span 8 / span 8}.lg\:grid-cols-12{grid-template-columns:repeat(12, minmax(0, 1fr))}}</style></head>
+<body class="font-sans antialiased flex flex-col min-h-screen justify-between">
+
+    <!-- TOP HEADER / NAV BAR -->
+    <header class="glass-card sticky top-0 z-50 px-6 py-4 border-b border-dark-border flex flex-wrap justify-between items-center gap-4">
+        <div class="flex items-center gap-3">
+            <div class="p-2.5 bg-blue-500/10 border border-blue-500/30 rounded-xl">
+                <i class="fa-solid font-bold fa-bolt text-2xl text-neon-blue"></i>
+            </div>
+            <div>
+                <h1 class="text-xl md:text-2xl font-black text-transparent bg-clip-text bg-gradient-to-l from-red-500 via-blue-400 to-emerald-400">
+                    مشروع كشف الأعطال في الكيبلات الأرضية (TDR)
+                </h1>
+                <p class="text-xs text-slate-400 flex items-center gap-2 mt-0.5">
+                    <span><i class="fa-solid fa-graduation-cap text-neon-blue"></i> جامعة الكوت - قسم الهندسة الكهربائية</span>
+                    <span>•</span>
+                    <span class="text-emerald-400 font-medium"><i class="fa-solid fa-microchip"></i> نظام تحليل انعكاسات النبضات عالي الدقة</span>
+                </p>
+            </div>
+        </div>
+
+        <!-- Serial Status & System Status Quick Bar -->
+        <div class="flex items-center gap-4 bg-slate-900/80 px-4 py-2 rounded-xl border border-dark-border">
+            <div class="flex items-center gap-2.5">
+                <div id="statusDot" class="w-3 h-3 rounded-full bg-red-500 shadow-[0_0_10px_#ef4444]"></div>
+                <span id="statusText" class="text-xs font-semibold text-slate-300">غير متصل بالأردوينو</span>
+            </div>
+            <div class="h-4 w-px bg-slate-700"></div>
+            <div class="text-xs text-slate-400 font-mono flex items-center gap-1.5">
+                <i class="fa-solid fa-network-wired text-neon-blue"></i>
+                <span id="pktRate">0 PKT/s</span>
+            </div>
+            <div class="h-4 w-px bg-slate-700"></div>
+            <button id="quickConnectBtn" class="no-print text-xs bg-neon-blue/10 hover:bg-neon-blue/20 text-neon-blue border border-neon-blue/30 px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 font-bold">
+                <i class="fa-solid fa-plug"></i> ربط USB
+            </button>
+        </div>
+    </header>
+
+    <!-- MAIN DASHBOARD CONTENT -->
+    <main class="w-full max-w-[1700px] mx-auto p-4 md:p-6 flex-1 grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+        <!-- LEFT SIDEBAR: CONTROLS & PARAMS (4 Columns on LG) -->
+        <aside class="no-print lg:col-span-4 flex flex-col gap-5">
+            
+            <!-- WEB SERIAL & ARDUINO CONNECTION -->
+            <div class="glass-card rounded-2xl p-5">
+                <h3 class="text-sm font-bold text-neon-blue border-b border-dark-border pb-3 mb-4 flex items-center justify-between">
+                    <span class="flex items-center gap-2"><i class="fa-solid fa-usb"></i> إعدادات الأردوينو (Web Serial API)</span>
+                    <span id="baudBadge" class="text-[10px] font-mono bg-slate-800 text-slate-400 px-2 py-0.5 rounded">AUTO HARDWARE</span>
+                </h3>
+
+                <div class="space-y-3">
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs text-slate-400 mb-1">معدل البود (Baud Rate)</label>
+                            <select id="baudRate" class="w-full bg-slate-900 border border-dark-border rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-neon-blue">
+                                <option value="9600">9600 Baud</option>
+                                <option value="115200" selected="">115200 Baud (مستحسن)</option>
+                                <option value="57600">57600 Baud</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-400 mb-1">وضع البيانات</label>
+                            <select id="dataSource" class="w-full bg-slate-900 border border-dark-border rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-neon-blue">
+                                <option value="simulator">محاكي فيزياء TDR</option>
+                                <option value="hardware">أردوينو حقيقي (USB)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-2">
+                        <button id="connectSerialBtn" class="flex-1 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 text-white font-bold py-2.5 px-4 rounded-xl text-xs transition-all shadow-lg flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-link"></i> اتصال بالأردوينو
+                        </button>
+                        <button id="disconnectSerialBtn" disabled="" class="bg-red-500/20 hover:bg-red-500/30 text-red-400 border border-red-500/30 font-bold py-2.5 px-3 rounded-xl text-xs transition-all disabled:opacity-40 disabled:cursor-not-allowed">
+                            <i class="fa-solid fa-power-off"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TDR SIMULATOR & PHYSICS CONTROLS -->
+            <div class="glass-card rounded-2xl p-5">
+                <h3 class="text-sm font-bold text-emerald-400 border-b border-dark-border pb-3 mb-4 flex items-center justify-between">
+                    <span class="flex items-center gap-2"><i class="fa-solid fa-sliders"></i> إعدادات الكيبل ومحاكي الأعطال</span>
+                    <span class="text-[10px] bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded border border-emerald-500/20">Physics Engine</span>
+                </h3>
+
+                <div class="space-y-4">
+                    <!-- Fault Type -->
+                    <div>
+                        <label class="block text-xs text-slate-400 mb-1">نوع العطل المتوقع (Fault Dynamic Target)</label>
+                        <select id="faultType" class="w-full bg-slate-900 border border-dark-border rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-neon-blue">
+                            <option value="open">قطع تام في الكيبل (Open Circuit - R = ∞)</option>
+                            <option value="short">قصر دائرة (Short Circuit - R = 0 Ω)</option>
+                            <option value="water">تسرب مياه / رطوبة (Water Ingress - Dynamic Z)</option>
+                            <option value="impedance">مقاومة ملامسة مرتفعة (High-Impedance Joint)</option>
+                            <option value="good">كيبل سليم ومكتمل (Matched Termination Z_L = Z_0)</option>
+                        </select>
+                    </div>
+
+                    <!-- Cable Dielectric VOP -->
+                    <div>
+                        <label class="block text-xs text-slate-400 mb-1 flex justify-between">
+                            <span>نوع العزل وسرعة الانتشار (VOP)</span>
+                            <span id="vopValText" class="font-mono text-neon-blue font-bold">0.66 c</span>
+                        </label>
+                        <select id="cableType" class="w-full bg-slate-900 border border-dark-border rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-neon-blue mb-2">
+                            <option value="0.66" selected="">XLPE / PVC Cable (VOP = 0.66c ≈ 198 m/µs)</option>
+                            <option value="0.82">PILC - ورق مشبع بالزيت (VOP = 0.82c ≈ 246 m/µs)</option>
+                            <option value="0.55">Coaxial Cable RG-58 (VOP = 0.55c ≈ 165 m/µs)</option>
+                            <option value="custom">مخصص (Custom VOP Coefficient)</option>
+                        </select>
+                        <input type="range" id="vopSlider" min="0.40" max="0.95" step="0.01" value="0.66" class="w-full accent-neon-blue bg-slate-800 rounded-lg cursor-pointer">
+                    </div>
+
+                    <!-- Fault Distance & Total Length -->
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs text-slate-400 mb-1">مسافة العطل (متر)</label>
+                            <input type="number" id="faultDistance" value="145" min="5" max="1000" class="w-full bg-slate-900 border border-dark-border rounded-lg px-3 py-2 text-xs font-mono text-neon-blue font-bold focus:outline-none focus:border-neon-blue">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-400 mb-1">الطول الكلي (متر)</label>
+                            <input type="number" id="totalCableLength" value="300" min="50" max="2000" class="w-full bg-slate-900 border border-dark-border rounded-lg px-3 py-2 text-xs font-mono text-slate-300 focus:outline-none focus:border-neon-blue">
+                        </div>
+                    </div>
+
+                    <!-- Attenuation & Noise Sliders -->
+                    <div class="grid grid-cols-2 gap-3 pt-1">
+                        <div>
+                            <label class="block text-[11px] text-slate-400 mb-1 flex justify-between">
+                                <span>التوهين (Attenuation)</span>
+                                <span id="attenuationValText" class="font-mono text-slate-300">1.5 dB</span>
+                            </label>
+                            <input type="range" id="attenuationSlider" min="0.1" max="5.0" step="0.1" value="1.5" class="w-full accent-emerald-400 bg-slate-800 rounded-lg cursor-pointer">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] text-slate-400 mb-1 flex justify-between">
+                                <span>الضوضاء (Noise)</span>
+                                <span id="noiseValText" class="font-mono text-slate-300">2%</span>
+                            </label>
+                            <input type="range" id="noiseSlider" min="0" max="15" step="1" value="2" class="w-full accent-amber-400 bg-slate-800 rounded-lg cursor-pointer">
+                        </div>
+                    </div>
+
+                    <!-- Run Simulation Trigger -->
+                    <button id="runSimulation" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2.5 px-4 rounded-xl text-xs transition-all shadow-lg flex items-center justify-center gap-2 mt-2">
+                        <i class="fa-solid fa-rotate"></i> تحديث القياسات والحسابات
+                    </button>
+                </div>
+            </div>
+
+            <!-- HARDWARE & SIGNAL CONTROL PANEL -->
+            <div class="glass-card rounded-2xl p-5">
+                <h3 class="text-sm font-bold text-amber-400 border-b border-dark-border pb-3 mb-4 flex items-center justify-between">
+                    <span class="flex items-center gap-2"><i class="fa-solid fa-gamepad"></i> أوامر المسح والتحكم الحي</span>
+                    <span id="scanStatusBadge" class="text-[10px] font-mono bg-amber-500/10 text-amber-400 border border-amber-500/20 px-2 py-0.5 rounded">IDLE</span>
+                </h3>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <button id="sendSingleShot" class="bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-bold py-2.5 px-3 rounded-xl text-xs transition-all flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-bolt-lightning text-amber-400"></i> نبضة مفردة
+                    </button>
+                    <button id="toggleContinuousScan" class="bg-blue-600/20 hover:bg-blue-600/30 text-neon-blue border border-neon-blue/30 font-bold py-2.5 px-3 rounded-xl text-xs transition-all flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-play" id="scanBtnIcon"></i> <span id="scanBtnText">مسح مستمر</span>
+                    </button>
+                    <button id="captureBaselineBtn" class="bg-purple-600/20 hover:bg-purple-600/30 text-purple-300 border border-purple-500/30 font-bold py-2 px-3 rounded-xl text-xs transition-all flex items-center justify-center gap-1.5">
+                        <i class="fa-solid fa-bookmark"></i> حفظ المرجعي
+                    </button>
+                    <button id="clearBaselineBtn" class="bg-slate-800 hover:bg-slate-700 text-slate-400 border border-slate-700 font-bold py-2 px-3 rounded-xl text-xs transition-all flex items-center justify-center gap-1.5">
+                        <i class="fa-solid fa-trash-can"></i> مسح المرجعي
+                    </button>
+                </div>
+
+                <div class="mt-3 pt-3 border-t border-dark-border flex gap-2">
+                    <button id="exportReport" class="flex-1 bg-red-600/20 hover:bg-red-600/30 text-red-400 border border-red-500/30 font-bold py-2.5 px-3 rounded-xl text-xs transition-all flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-file-pdf"></i> طباعة التقرير الهندسي
+                    </button>
+                    <button id="exportCsvBtn" class="bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 font-bold py-2.5 px-3 rounded-xl text-xs transition-all flex items-center justify-center gap-1.5" title="تصدير CSV">
+                        <i class="fa-solid fa-file-csv text-emerald-400"></i> CSV
+                    </button>
+                </div>
+            </div>
+
+        </aside>
+
+        <!-- RIGHT DISPLAY & METRICS AREA (8 Columns on LG) -->
+        <section class="lg:col-span-8 flex flex-col gap-6">
+
+            <!-- HIGH PRECISION TDR REFLECTOGRAM CANVAS -->
+            <div class="glass-card rounded-2xl p-5 flex flex-col flex-1 relative overflow-hidden">
+                <div class="flex flex-wrap justify-between items-center pb-3 mb-2 border-b border-dark-border gap-2">
+                    <div class="flex items-center gap-2">
+                        <i class="fa-solid fa-chart-line text-neon-blue"></i>
+                        <h3 class="text-sm font-bold text-white">مخطط انعكاس الزمان والمكان (TDR Reflectogram Waveform)</h3>
+                    </div>
+                    <div class="flex items-center gap-2 text-xs">
+                        <span class="inline-flex items-center gap-1 text-neon-blue font-mono bg-blue-500/10 px-2 py-1 rounded border border-blue-500/20">
+                            <span class="w-2 h-2 rounded-full bg-neon-blue"></span> إشارة حية
+                        </span>
+                        <span id="refLegendBadge" class="hidden inline-flex items-center gap-1 text-purple-400 font-mono bg-purple-500/10 px-2 py-1 rounded border border-purple-500/20">
+                            <span class="w-2 h-2 rounded-full bg-purple-400"></span> خط مرجعي (Baseline)
+                        </span>
+                        <button id="resetZoomBtn" class="no-print bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 px-2.5 py-1 rounded text-[11px] transition-all">
+                            <i class="fa-solid fa-magnifying-glass-minus"></i> إعادة ضبط التكبير
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Cursor Delta Measurement Banner -->
+                <div class="bg-slate-900/90 border border-dark-border rounded-xl p-3 mb-3 grid grid-cols-2 sm:grid-cols-4 gap-2 text-center text-xs font-mono">
+                    <div class="bg-slate-950/60 p-2 rounded-lg border border-slate-800">
+                        <span class="text-slate-400 block text-[10px] font-sans">المؤشر أ (Cursor A)</span>
+                        <span id="cursorADist" class="text-neon-blue font-bold">0.0 m</span>
+                        <span id="cursorATime" class="text-[10px] text-slate-500 block">0.00 µs</span>
+                    </div>
+                    <div class="bg-slate-950/60 p-2 rounded-lg border border-slate-800">
+                        <span class="text-slate-400 block text-[10px] font-sans">المؤشر ب (Cursor B)</span>
+                        <span id="cursorBDist" class="text-amber-400 font-bold">145.0 m</span>
+                        <span id="cursorBTime" class="text-[10px] text-slate-500 block">1.47 µs</span>
+                    </div>
+                    <div class="bg-slate-950/60 p-2 rounded-lg border border-slate-800">
+                        <span class="text-slate-400 block text-[10px] font-sans">فارق المسافة (ΔD)</span>
+                        <span id="deltaDist" class="text-emerald-400 font-bold">145.0 m</span>
+                    </div>
+                    <div class="bg-slate-950/60 p-2 rounded-lg border border-slate-800">
+                        <span class="text-slate-400 block text-[10px] font-sans">فارق الزمن (Δt)</span>
+                        <span id="deltaTime" class="text-purple-400 font-bold">1.47 µs</span>
+                    </div>
+                </div>
+
+                <!-- Chart Wrapper Container -->
+                <div class="relative w-full flex-1 min-h-[380px] chart-container-print">
+                    <canvas id="tdrChart" width="824" height="380" style="display: block; box-sizing: border-box; height: 380px; width: 824px;"></canvas>
+                </div>
+
+                <div class="mt-2 text-[11px] text-slate-400 flex flex-wrap justify-between items-center gap-2">
+                    <span class="flex items-center gap-1.5"><i class="fa-solid fa-circle-info text-neon-blue"></i> يمكنك سحب المؤشرات الرأسية لربط قياسات الزمن بدقة عالية على طول الكيبل.</span>
+                    <span class="font-mono text-slate-500">Formula: D = (VOP × c × Δt) / 2</span>
+                </div>
+            </div>
+
+            <!-- ANALYTICAL METRICS GRID -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                
+                <!-- Calculated Distance -->
+                <div class="glass-card rounded-2xl p-4 text-center border-t-2 border-t-neon-blue flex flex-col justify-between">
+                    <div class="flex justify-between items-center text-slate-400 text-xs mb-1">
+                        <span>المسافة المقدرة للعطل</span>
+                        <i class="fa-solid fa-ruler-horizontal text-neon-blue"></i>
+                    </div>
+                    <h4 id="calcDistance" class="text-2xl font-black text-neon-blue font-mono my-1">145.0 م</h4>
+                    <span id="distAccuracyText" class="text-[10px] text-emerald-400 font-semibold bg-emerald-500/10 rounded py-0.5 px-1.5 inline-block">دقة القياس ±0.5م</span>
+                </div>
+
+                <!-- Reflection Coefficient Rho -->
+                <div class="glass-card rounded-2xl p-4 text-center border-t-2 border-t-emerald-400 flex flex-col justify-between">
+                    <div class="flex justify-between items-center text-slate-400 text-xs mb-1">
+                        <span>معامل الانعكاس (ρ / Rho)</span>
+                        <i class="fa-solid fa-wave-square text-emerald-400"></i>
+                    </div>
+                    <h4 id="calcRho" class="text-2xl font-black text-emerald-400 font-mono my-1">+1.00</h4>
+                    <span id="rhoTypeBadge" class="text-[10px] text-slate-300 font-medium bg-slate-800 rounded py-0.5 px-1.5 inline-block">+1.00 (Open Circuit)</span>
+                </div>
+
+                <!-- Time Delay -->
+                <div class="glass-card rounded-2xl p-4 text-center border-t-2 border-t-purple-400 flex flex-col justify-between">
+                    <div class="flex justify-between items-center text-slate-400 text-xs mb-1">
+                        <span>زمن تأخير النبضة (Δt)</span>
+                        <i class="fa-solid fa-stopwatch text-purple-400"></i>
+                    </div>
+                    <h4 id="calcTimeDelay" class="text-2xl font-black text-purple-400 font-mono my-1">1.47 µs</h4>
+                    <span class="text-[10px] text-slate-400 font-mono">الزمن للذهاب والإياب</span>
+                </div>
+
+                <!-- Return Loss / Fault Type -->
+                <div class="glass-card rounded-2xl p-4 text-center border-t-2 border-t-amber-400 flex flex-col justify-between">
+                    <div class="flex justify-between items-center text-slate-400 text-xs mb-1">
+                        <span>خسارة العودة (Return Loss)</span>
+                        <i class="fa-solid fa-arrow-trend-down text-amber-400"></i>
+                    </div>
+                    <h4 id="calcReturnLoss" class="text-2xl font-black text-amber-400 font-mono my-1">0.0 dB</h4>
+                    <span id="faultDiagnosisBadge" class="text-[10px] font-bold rounded py-0.5 px-1.5 inline-block border text-red-400 bg-red-500/10 border-red-500/20">انقطاع تام (Open Fault)</span>
+                </div>
+
+            </div>
+
+            <!-- HISTORY LOG TABLE & EXPERIMENTAL DATA -->
+            <div class="glass-card rounded-2xl p-5">
+                <div class="flex justify-between items-center pb-3 mb-3 border-b border-dark-border">
+                    <h3 class="text-sm font-bold text-slate-200 flex items-center gap-2">
+                        <i class="fa-solid fa-list-check text-neon-blue"></i> سجل الفحوصات والقياسات المحفوظة (Scans History Log)
+                    </h3>
+                    <button id="clearLogBtn" class="no-print text-xs text-slate-400 hover:text-red-400 transition-all flex items-center gap-1">
+                        <i class="fa-solid fa-trash"></i> مسح السجل
+                    </button>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-right text-xs">
+                        <thead>
+                            <tr class="text-slate-400 border-b border-dark-border bg-slate-900/50 font-mono">
+                                <th class="p-2.5 rounded-r-lg">#</th>
+                                <th class="p-2.5">الوقت</th>
+                                <th class="p-2.5">نوع العطل</th>
+                                <th class="p-2.5">المسافة المقاسة</th>
+                                <th class="p-2.5">VOP</th>
+                                <th class="p-2.5">معامل Rho</th>
+                                <th class="p-2.5 rounded-l-lg">الحالة</th>
+                            </tr>
+                        </thead>
+                        <tbody id="historyTableBody" class="divide-y divide-dark-border font-mono text-slate-300">
+                            <!-- Rows populated dynamically -->
+                            <tr>
+                                <td colspan="7" class="p-4 text-center text-slate-500 font-sans">لا توجد فحوصات مسجلة حالياً. اضغط "حفظ المرجعي" أو "تحديث القياسات" لأرشفة النتيجة.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </section>
+    </main>
+
+    <!-- REPORT PRINT HEADER & FOOTER (HIDDEN UNTIL PRINT) -->
+    <div class="hidden print-only p-6 border-b-2 border-slate-900 mb-4">
+        <div class="flex justify-between items-center">
+            <div>
+                <h1 class="text-2xl font-bold">تقرير هندسي: فحص وتشخيص الكيبلات الأرضية TDR</h1>
+                <p class="text-sm text-slate-600">جامعة الكوت - كلية الهندسة | مشروع كشف الأعطال</p>
+            </div>
+            <div class="text-left text-xs font-mono">
+                <p>تاريخ التقرير: <span id="printDate">٧‏/١١‏/٢٠٢٦ ٣:١٦:٣٩ م</span></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- APP FOOTER -->
+    <footer class="app-footer w-full bg-slate-950 border-t border-dark-border py-4 px-6 mt-8">
+        <div class="max-w-[1700px] mx-auto flex flex-wrap justify-between items-center gap-4 text-xs">
+            <div class="flex items-center gap-3">
+                <p class="app-version text-slate-400 flex items-center gap-2">
+                    <i class="fa-solid fa-university text-neon-blue"></i>
+                    <span>مشروع كشف الأعطال في الكيبلات الأرضية TDR | جامعة الكوت</span>
+                </p>
+            </div>
+            <div class="text-slate-400 flex items-center gap-4">
+                <span class="font-mono text-slate-500">v2.5 High-Precision Edition</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- MAIN JAVASCRIPT ENGINE & WEB SERIAL LOGIC -->
+    <script>
+        // --- GLOBAL STATE VARIABLES ---
+        let tdrChart = null;
+        let serialPort = null;
+        let reader = null;
+        let isContinuousScanning = false;
+        let scanInterval = null;
+        let baselineWaveform = null;
+        let currentWaveform = [];
+        let historyLog = [];
+
+        // Dual Cursor Positions in Meters
+        let cursorAPos = 0;
+        let cursorBPos = 145;
+
+        // Constants
+        const SPEED_OF_LIGHT = 299792458; // m/s
+
+        // --- INITIALIZATION ON WINDOW LOAD ---
+        window.onload = () => {
+            initChart();
+            setupEventListeners();
+            updatePhysicsCalculations();
+            
+            // Set print date
+            const dateSpan = document.getElementById('printDate');
+            if(dateSpan) dateSpan.innerText = new Date().toLocaleString('ar-IQ');
+        };
+
+        // --- TDR CHART INITIALIZATION (CHART.JS WITH DRAGGABLE ANNOTATION CURSORS) ---
+        function initChart() {
+            const ctx = document.getElementById('tdrChart').getContext('2d');
+            
+            // Generate 300 data points along the cable
+            const totalPoints = 300;
+            const maxDist = parseFloat(document.getElementById('totalCableLength').value) || 300;
+            const labels = Array.from({length: totalPoints}, (_, i) => ((i / (totalPoints - 1)) * maxDist).toFixed(1));
+            
+            const initialWave = generatePhysicsWaveform('open', 145, 0.66, maxDist, 1.5, 2);
+            currentWaveform = initialWave;
+
+            tdrChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'إشارة الـ TDR الحية (Live Pulse Signal)',
+                            data: initialWave,
+                            borderColor: '#38bdf8',
+                            borderWidth: 2.5,
+                            pointRadius: 0,
+                            pointHoverRadius: 4,
+                            tension: 0.15,
+                            fill: {
+                                target: 'origin',
+                                above: 'rgba(56, 189, 248, 0.05)',
+                                below: 'rgba(239, 68, 68, 0.05)'
+                            }
+                        },
+                        {
+                            label: 'الخط المرجعي السليم (Baseline Reference)',
+                            data: [],
+                            borderColor: '#a855f7',
+                            borderWidth: 1.8,
+                            borderDash: [4, 4],
+                            pointRadius: 0,
+                            tension: 0.15,
+                            hidden: true
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: { mode: 'index', intersect: false },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: '#0f172a',
+                            titleColor: '#38bdf8',
+                            bodyColor: '#f8fafc',
+                            borderColor: '#1e293b',
+                            borderWidth: 1,
+                            rtl: true,
+                            callbacks: {
+                                label: (context) => ` السعة: ${context.parsed.y.toFixed(3)} V | المسافة: ${context.label} م`
+                            }
+                        },
+                        zoom: {
+                            pan: { enabled: true, mode: 'x' },
+                            zoom: { wheel: { enabled: true }, pinch: { enabled: true }, mode: 'x' }
+                        },
+                        annotation: {
+                            annotations: {
+                                cursorA: {
+                                    type: 'line',
+                                    xMin: 0,
+                                    xMax: 0,
+                                    borderColor: '#38bdf8',
+                                    borderWidth: 2,
+                                    borderDash: [6, 3],
+                                    label: {
+                                        display: true,
+                                        content: 'Cursor A (Origin)',
+                                        position: 'start',
+                                        backgroundColor: 'rgba(56, 189, 248, 0.8)',
+                                        color: '#fff',
+                                        font: { size: 10, family: 'Tajawal' }
+                                    }
+                                },
+                                cursorB: {
+                                    type: 'line',
+                                    xMin: 145,
+                                    xMax: 145,
+                                    borderColor: '#f59e0b',
+                                    borderWidth: 2,
+                                    borderDash: [6, 3],
+                                    label: {
+                                        display: true,
+                                        content: 'Cursor B (Fault)',
+                                        position: 'start',
+                                        backgroundColor: 'rgba(245, 158, 11, 0.8)',
+                                        color: '#fff',
+                                        font: { size: 10, family: 'Tajawal' }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: { color: 'rgba(30, 41, 59, 0.6)' },
+                            ticks: { color: '#94a3b8', font: { family: 'JetBrains Mono', size: 10 } },
+                            title: { display: true, text: 'المسافة على طول الكيبل (متر)', color: '#64748b', font: { family: 'Tajawal', size: 12 } }
+                        },
+                        y: {
+                            grid: { color: 'rgba(30, 41, 59, 0.6)' },
+                            ticks: { color: '#94a3b8', font: { family: 'JetBrains Mono', size: 10 } },
+                            min: -1.6,
+                            max: 1.6,
+                            title: { display: true, text: 'السعة والجهد المنعكس (Volt / Normalized)', color: '#64748b', font: { family: 'Tajawal', size: 12 } }
+                        }
+                    }
+                }
+            });
+
+            // Update Cursors on chart init
+            updateCursorAnnotations();
+        }
+
+        // --- REALISTIC TDR PHYSICS SIGNAL GENERATOR ---
+        function generatePhysicsWaveform(type, faultDist, vop, totalDist, attenDb, noisePct) {
+            const pointsCount = 300;
+            const points = [];
+            const stepMeters = totalDist / pointsCount;
+            
+            // Attenuation factor per meter alpha
+            const alpha = (attenDb / 100) * 0.1151; 
+
+            for (let i = 0; i < pointsCount; i++) {
+                const x = i * stepMeters;
+                let val = 0;
+
+                // 1. Initial Transmitted Incident Pulse (Tx Pulse at x=0)
+                if (x < 12) {
+                    val = 1.2 * Math.exp(-Math.pow((x - 2) / 3.5, 2));
+                }
+
+                // 2. Reflection Pulse at Fault Distance (Rx Reflection)
+                const distDiff = Math.abs(x - faultDist);
+                if (distDiff < 25) {
+                    const attenuationFactor = Math.exp(-alpha * faultDist * 2);
+                    let rho = 0;
+
+                    if (type === 'open') rho = 1.0;
+                    else if (type === 'short') rho = -1.0;
+                    else if (type === 'water') rho = -0.45; // Water causes negative drop then rise
+                    else if (type === 'impedance') rho = 0.40;
+                    else if (type === 'good') rho = 0.05; // Minor end attenuation
+
+                    let pulseShape = Math.exp(-Math.pow(distDiff / 6, 2));
+                    
+                    if (type === 'water') {
+                        // Oscillatory complex damped wave for moisture
+                        pulseShape = Math.exp(-distDiff / 5) * Math.cos(distDiff * 0.5);
+                    }
+
+                    val += rho * attenuationFactor * pulseShape;
+                }
+
+                // 3. Add High-Frequency Line Noise
+                const noiseVal = (Math.random() - 0.5) * (noisePct / 100) * 0.3;
+                val += noiseVal;
+
+                points.push(val);
+            }
+            return points;
+        }
+
+        // --- UPDATE CALCULATIONS & METRICS DISPLAY ---
+        function updatePhysicsCalculations() {
+            const fType = document.getElementById('faultType').value;
+            const fDist = parseFloat(document.getElementById('faultDistance').value) || 100;
+            const vop = parseFloat(document.getElementById('vopSlider').value) || 0.66;
+            const totalLen = parseFloat(document.getElementById('totalCableLength').value) || 300;
+            const atten = parseFloat(document.getElementById('attenuationSlider').value) || 1.5;
+            const noise = parseFloat(document.getElementById('noiseSlider').value) || 2;
+
+            // Calculate Time Delay dt = 2 * Distance / (VOP * c)
+            const vSpeed = vop * SPEED_OF_LIGHT; // m/s
+            const timeDelaySec = (2 * fDist) / vSpeed;
+            const timeDelayMicroSec = timeDelaySec * 1e6;
+
+            // Reflection Coefficient Rho & Return Loss
+            let rho = 1.0;
+            let rhoLabel = 'دائرة مفتوحة (Open)';
+            let returnLoss = 0.0;
+            let diagnosis = 'انقطاع تام في الكيبل';
+            let diagColor = 'text-red-400 bg-red-500/10 border-red-500/20';
+
+            if (fType === 'open') {
+                rho = 1.00;
+                rhoLabel = '+1.00 (Open Circuit)';
+                returnLoss = 0.0;
+                diagnosis = 'انقطاع تام (Open Fault)';
+            } else if (fType === 'short') {
+                rho = -1.00;
+                rhoLabel = '-1.00 (Short Circuit)';
+                returnLoss = 0.0;
+                diagnosis = 'قصر دائرة (Short Fault)';
+                diagColor = 'text-red-400 bg-red-500/10 border-red-500/20';
+            } else if (fType === 'water') {
+                rho = -0.45;
+                rhoLabel = '-0.45 (Complex Damp)';
+                returnLoss = 6.9;
+                diagnosis = 'رطوبة / تسرب مياه (Water Ingress)';
+                diagColor = 'text-amber-400 bg-amber-500/10 border-amber-500/20';
+            } else if (fType === 'impedance') {
+                rho = +0.40;
+                rhoLabel = '+0.40 (High Resistance)';
+                returnLoss = 7.9;
+                diagnosis = 'تأكل وصلة (High Z Joint)';
+                diagColor = 'text-amber-400 bg-amber-500/10 border-amber-500/20';
+            } else if (fType === 'good') {
+                rho = 0.05;
+                rhoLabel = '+0.05 (Matched)';
+                returnLoss = 26.0;
+                diagnosis = 'الكيبل سليم (Healthy Cable)';
+                diagColor = 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20';
+            }
+
+            // Update UI Metrics Elements
+            document.getElementById('calcDistance').innerText = fDist.toFixed(1) + ' م';
+            document.getElementById('calcRho').innerText = (rho > 0 ? '+' : '') + rho.toFixed(2);
+            document.getElementById('rhoTypeBadge').innerText = rhoLabel;
+            document.getElementById('calcTimeDelay').innerText = timeDelayMicroSec.toFixed(2) + ' µs';
+            document.getElementById('calcReturnLoss').innerText = returnLoss.toFixed(1) + ' dB';
+            
+            const diagBadge = document.getElementById('faultDiagnosisBadge');
+            diagBadge.innerText = diagnosis;
+            diagBadge.className = `text-[10px] font-bold rounded py-0.5 px-1.5 inline-block border ${diagColor}`;
+
+            // Sync Cursor B Position to Fault Distance
+            cursorBPos = fDist;
+            updateCursorAnnotations();
+
+            // Regenerate Signal Waveform
+            const newWave = generatePhysicsWaveform(fType, fDist, vop, totalLen, atten, noise);
+            currentWaveform = newWave;
+
+            if (tdrChart) {
+                // Update Labels for new Total Cable Length
+                const labels = Array.from({length: 300}, (_, i) => ((i / 299) * totalLen).toFixed(1));
+                tdrChart.data.labels = labels;
+                tdrChart.data.datasets[0].data = newWave;
+                tdrChart.update();
+            }
+        }
+
+        // --- UPDATE DUAL CURSORS & TIME DELTA READOUTS ---
+        function updateCursorAnnotations() {
+            if (!tdrChart) return;
+
+            const vop = parseFloat(document.getElementById('vopSlider').value) || 0.66;
+            const vSpeed = vop * SPEED_OF_LIGHT;
+
+            const deltaD = Math.abs(cursorBPos - cursorAPos);
+            const deltaTSec = (2 * deltaD) / vSpeed;
+            const deltaTMicroSec = deltaTSec * 1e6;
+
+            const timeA = ((2 * cursorAPos) / vSpeed) * 1e6;
+            const timeB = ((2 * cursorBPos) / vSpeed) * 1e6;
+
+            document.getElementById('cursorADist').innerText = cursorAPos.toFixed(1) + ' m';
+            document.getElementById('cursorATime').innerText = timeA.toFixed(2) + ' µs';
+
+            document.getElementById('cursorBDist').innerText = cursorBPos.toFixed(1) + ' m';
+            document.getElementById('cursorBTime').innerText = timeB.toFixed(2) + ' µs';
+
+            document.getElementById('deltaDist').innerText = deltaD.toFixed(1) + ' m';
+            document.getElementById('deltaTime').innerText = deltaTMicroSec.toFixed(2) + ' µs';
+
+            // Update Chart.js Annotations
+            tdrChart.options.plugins.annotation.annotations.cursorA.xMin = cursorAPos;
+            tdrChart.options.plugins.annotation.annotations.cursorA.xMax = cursorAPos;
+
+            tdrChart.options.plugins.annotation.annotations.cursorB.xMin = cursorBPos;
+            tdrChart.options.plugins.annotation.annotations.cursorB.xMax = cursorBPos;
+
+            tdrChart.update('none'); // Update without full redraw animation for speed
+        }
+
+        // --- WEB SERIAL API HARDWARE INTEGRATION ---
+        async function connectSerial() {
+            if (!('serial' in navigator)) {
+                showToast('متصفحك لا يدعم خاصية Web Serial API. يرجى استخدام Chrome أو Edge.', 'error');
+                return;
+            }
+
+            try {
+                const baud = parseInt(document.getElementById('baudRate').value);
+                serialPort = await navigator.serial.requestPort();
+                await serialPort.open({ baudRate: baud });
+
+                document.getElementById('statusText').innerText = "متصل بالأردوينو (COM)";
+                document.getElementById('statusDot').className = "w-3 h-3 rounded-full bg-emerald-500 shadow-[0_0_10px_#10b981] animate-pulse-fast";
+                document.getElementById('connectSerialBtn').disabled = true;
+                document.getElementById('disconnectSerialBtn').disabled = false;
+                document.getElementById('dataSource').value = "hardware";
+
+                showToast('تم الاتصال بالأردوينو بنجاح!', 'success');
+                readSerialLoop();
+
+            } catch (err) {
+                console.error("Serial connection error:", err);
+                showToast('فشل الاتصال بمنفذ USB الأردوينو.', 'error');
+            }
+        }
+
+        async function disconnectSerial() {
+            if (reader) {
+                await reader.cancel();
+            }
+            if (serialPort) {
+                await serialPort.close();
+                serialPort = null;
+            }
+            document.getElementById('statusText').innerText = "غير متصل بالأردوينو";
+            document.getElementById('statusDot').className = "w-3 h-3 rounded-full bg-red-500 shadow-[0_0_10px_#ef4444]";
+            document.getElementById('connectSerialBtn').disabled = false;
+            document.getElementById('disconnectSerialBtn').disabled = true;
+            document.getElementById('dataSource').value = "simulator";
+            showToast('تم فصل الاتصال بالأردوينو.', 'info');
+        }
+
+        async function readSerialLoop() {
+            const textDecoder = new TextDecoderStream();
+            const readableStreamClosed = serialPort.readable.pipeTo(textDecoder.writable);
+            reader = textDecoder.readable.getReader();
+
+            let buffer = '';
+            let pktCount = 0;
+
+            // Packet rate counter loop
+            const rateInterval = setInterval(() => {
+                document.getElementById('pktRate').innerText = `${pktCount} PKT/s`;
+                pktCount = 0;
+                if (!serialPort) clearInterval(rateInterval);
+            }, 1000);
+
+            try {
+                while (true) {
+                    const { value, done } = await reader.read();
+                    if (done) break;
+                    if (value) {
+                        buffer += value;
+                        let lines = buffer.split('\n');
+                        buffer = lines.pop(); // keep last incomplete line
+
+                        for (let line of lines) {
+                            line = line.trim();
+                            if (line.length > 0) {
+                                pktCount++;
+                                parseArduinoPacket(line);
+                            }
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error("Serial Read Error:", error);
+            } finally {
+                reader.releaseLock();
+            }
+        }
+
+        // Parse incoming ASCII serial line e.g. "DIST:145.5,TYPE:OPEN" or array "WAVE:0.1,0.2,1.2..."
+        function parseArduinoPacket(packet) {
+            if (packet.startsWith("DIST:")) {
+                const parts = packet.split(',');
+                const distVal = parseFloat(parts[0].replace("DIST:", ""));
+                if (!isNaN(distVal)) {
+                    document.getElementById('faultDistance').value = distVal;
+                    updatePhysicsCalculations();
+                }
+            } else if (packet.startsWith("WAVE:")) {
+                const rawVals = packet.replace("WAVE:", "").split(',').map(Number);
+                if (rawVals.length > 10 && tdrChart) {
+                    tdrChart.data.datasets[0].data = rawVals;
+                    tdrChart.update();
+                }
+            }
+        }
+
+        // --- CONTROLS & EVENT LISTENERS ---
+        function setupEventListeners() {
+            // Simulator Inputs
+            document.getElementById('faultType').addEventListener('change', updatePhysicsCalculations);
+            document.getElementById('faultDistance').addEventListener('input', updatePhysicsCalculations);
+            document.getElementById('totalCableLength').addEventListener('input', updatePhysicsCalculations);
+            document.getElementById('runSimulation').addEventListener('click', () => {
+                updatePhysicsCalculations();
+                logCurrentScan();
+                showToast('تم تحديث المسح ومحاكاة النبضة.', 'success');
+            });
+
+            // VOP Controls
+            const vopSlider = document.getElementById('vopSlider');
+            const vopSelect = document.getElementById('cableType');
+            const vopText = document.getElementById('vopValText');
+
+            vopSlider.addEventListener('input', (e) => {
+                const val = parseFloat(e.target.value).toFixed(2);
+                vopText.innerText = `${val} c`;
+                vopSelect.value = "custom";
+                updatePhysicsCalculations();
+            });
+
+            vopSelect.addEventListener('change', (e) => {
+                if (e.target.value !== "custom") {
+                    vopSlider.value = e.target.value;
+                    vopText.innerText = `${e.target.value} c`;
+                    updatePhysicsCalculations();
+                }
+            });
+
+            // Attenuation & Noise Sliders
+            document.getElementById('attenuationSlider').addEventListener('input', (e) => {
+                document.getElementById('attenuationValText').innerText = `${e.target.value} dB`;
+                updatePhysicsCalculations();
+            });
+
+            document.getElementById('noiseSlider').addEventListener('input', (e) => {
+                document.getElementById('noiseValText').innerText = `${e.target.value}%`;
+                updatePhysicsCalculations();
+            });
+
+            // Serial Connection Buttons
+            document.getElementById('connectSerialBtn').addEventListener('click', connectSerial);
+            document.getElementById('quickConnectBtn').addEventListener('click', connectSerial);
+            document.getElementById('disconnectSerialBtn').addEventListener('click', disconnectSerial);
+
+            // Command Buttons
+            document.getElementById('sendSingleShot').addEventListener('click', () => {
+                updatePhysicsCalculations();
+                showToast('تم إرسال نبضة مفردة (Single Shot Pulse)', 'info');
+            });
+
+            // Continuous Scan Toggle
+            document.getElementById('toggleContinuousScan').addEventListener('click', toggleContinuousScan);
+
+            // Baseline Capture Controls
+            document.getElementById('captureBaselineBtn').addEventListener('click', captureBaseline);
+            document.getElementById('clearBaselineBtn').addEventListener('click', clearBaseline);
+
+            // Export & Print
+            document.getElementById('exportReport').addEventListener('click', () => { window.print(); });
+            document.getElementById('exportCsvBtn').addEventListener('click', exportCsv);
+            document.getElementById('clearLogBtn').addEventListener('click', () => {
+                historyLog = [];
+                renderHistoryTable();
+                showToast('تم مسح سجل الفحوصات.', 'info');
+            });
+
+            // Reset Zoom Button
+            document.getElementById('resetZoomBtn').addEventListener('click', () => {
+                if (tdrChart) tdrChart.resetZoom();
+            });
+        }
+
+        // Continuous Scanning Loop
+        function toggleContinuousScan() {
+            const btn = document.getElementById('toggleContinuousScan');
+            const icon = document.getElementById('scanBtnIcon');
+            const text = document.getElementById('scanBtnText');
+            const badge = document.getElementById('scanStatusBadge');
+
+            if (!isContinuousScanning) {
+                isContinuousScanning = true;
+                icon.className = "fa-solid fa-square text-red-400";
+                text.innerText = "إيقاف المسح";
+                badge.innerText = "SCANNING LIVE";
+                badge.className = "text-[10px] font-mono bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2 py-0.5 rounded animate-pulse-fast";
+
+                scanInterval = setInterval(() => {
+                    updatePhysicsCalculations();
+                }, 300);
+            } else {
+                isContinuousScanning = false;
+                clearInterval(scanInterval);
+                icon.className = "fa-solid fa-play text-neon-blue";
+                text.innerText = "مسح مستمر";
+                badge.innerText = "IDLE";
+                badge.className = "text-[10px] font-mono bg-amber-500/10 text-amber-400 border border-amber-500/20 px-2 py-0.5 rounded";
+            }
+        }
+
+        // Capture Baseline Trace
+        function captureBaseline() {
+            baselineWaveform = [...currentWaveform];
+            tdrChart.data.datasets[1].data = baselineWaveform;
+            tdrChart.data.datasets[1].hidden = false;
+            tdrChart.update();
+
+            document.getElementById('refLegendBadge').classList.remove('hidden');
+            showToast('تم التقاط الإشارة الحالية كخط مرجعي (Baseline captured)', 'success');
+        }
+
+        function clearBaseline() {
+            baselineWaveform = null;
+            tdrChart.data.datasets[1].data = [];
+            tdrChart.data.datasets[1].hidden = true;
+            tdrChart.update();
+
+            document.getElementById('refLegendBadge').classList.add('hidden');
+            showToast('تم مسح الخط المرجعي', 'info');
+        }
+
+        // --- HISTORY LOG & TABLE MANAGEMENT ---
+        function logCurrentScan() {
+            const fType = document.getElementById('faultType').value;
+            const dist = document.getElementById('calcDistance').innerText;
+            const rho = document.getElementById('calcRho').innerText;
+            const vop = document.getElementById('vopValText').innerText;
+            const timestamp = new Date().toLocaleTimeString('ar-IQ');
+
+            const entry = {
+                id: historyLog.length + 1,
+                time: timestamp,
+                type: fType === 'open' ? 'قطع (Open)' : fType === 'short' ? 'قصر (Short)' : fType === 'water' ? 'رطوبة (Water)' : 'سليم',
+                dist: dist,
+                vop: vop,
+                rho: rho,
+                status: 'مكتمل'
+            };
+
+            historyLog.unshift(entry); // Add to top
+            if (historyLog.length > 20) historyLog.pop();
+            renderHistoryTable();
+        }
+
+        function renderHistoryTable() {
+            const tbody = document.getElementById('historyTableBody');
+            if (historyLog.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7" class="p-4 text-center text-slate-500 font-sans">لا توجد فحوصات مسجلة حالياً. اضغط "حفظ المرجعي" أو "تحديث القياسات" لأرشفة النتيجة.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = historyLog.map(item => `
+                <tr class="hover:bg-slate-900/80 transition-all">
+                    <td class="p-2.5 font-bold text-neon-blue">#${item.id}</td>
+                    <td class="p-2.5 text-slate-400">${item.time}</td>
+                    <td class="p-2.5 font-sans">${item.type}</td>
+                    <td class="p-2.5 text-emerald-400 font-bold">${item.dist}</td>
+                    <td class="p-2.5">${item.vop}</td>
+                    <td class="p-2.5">${item.rho}</td>
+                    <td class="p-2.5"><span class="bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded text-[10px] font-sans">${item.status}</span></td>
+                </tr>
+            `).join('');
+        }
+
+        // Export Log to CSV File
+        function exportCsv() {
+            if (historyLog.length === 0) {
+                showToast('لا توجد بيانات مسجلة للتصدير.', 'error');
+                return;
+            }
+
+            let csvContent = "data:text/csv;charset=utf-8,\uFEFF"; // UTF-8 BOM for Arabic support
+            csvContent += "الرقم,الوقت,نوع العطل,المسافة المقاسة,VOP,معامل Rho,الحالة\n";
+
+            historyLog.forEach(row => {
+                csvContent += `${row.id},${row.time},${row.type},${row.dist},${row.vop},${row.rho},${row.status}\n`;
+            });
+
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", `TDR_Cable_Scan_Report_${Date.now()}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // Custom Floating Toast Notification
+        function showToast(message, type = 'info') {
+            const toast = document.createElement('div');
+            const bgClass = type === 'success' ? 'bg-emerald-600' : type === 'error' ? 'bg-red-600' : 'bg-blue-600';
+            
+            toast.className = `fixed bottom-6 left-6 z-50 ${bgClass} text-white px-4 py-2.5 rounded-xl shadow-2xl text-xs font-bold font-sans flex items-center gap-2 transition-all duration-300 transform translate-y-10 opacity-0`;
+            toast.innerHTML = `<i class="fa-solid fa-circle-info"></i> ${message}`;
+
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                toast.classList.remove('translate-y-10', 'opacity-0');
+            }, 10);
+
+            setTimeout(() => {
+                toast.classList.add('translate-y-10', 'opacity-0');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+    </script>
+
+
+      <script>
+        (function() {
+          // The root element's background fills the whole page. As in CSS,
+          // the body's background is used when the root element has none.
+          function getPageBackgroundColor() {
+            var docStyle = window.getComputedStyle(document.documentElement);
+            var color = docStyle.backgroundColor;
+            if ((color === 'rgba(0, 0, 0, 0)' || color === 'transparent') &&
+                docStyle.backgroundImage === 'none' && document.body) {
+              color = window.getComputedStyle(document.body).backgroundColor;
+            }
+            return color || '';
+          }
+
+          var lastReportedColor = '';
+          function reportBackgroundColor() {
+            try {
+              var color = getPageBackgroundColor();
+              if (color === lastReportedColor) return;
+              lastReportedColor = color;
+              window.parent.postMessage({
+                type: 'ATARI_CODE_EMBED_BACKGROUND_COLOR',
+                backgroundColor: color
+              }, '*');
+            } catch (e) {}
+          }
+
+          // The page background usually changes through an attribute on html
+          // or body (for example a theme class), a style sheet in head, or the
+          // system color scheme.
+          if (typeof MutationObserver !== 'undefined') {
+            var observer = new MutationObserver(reportBackgroundColor);
+            observer.observe(document.documentElement, {attributes: true});
+            if (document.body) {
+              observer.observe(document.body, {attributes: true});
+            }
+            if (document.head) {
+              observer.observe(document.head, {
+                attributes: true,
+                childList: true,
+                subtree: true,
+                characterData: true
+              });
+            }
+          }
+          var colorSchemeQuery =
+              window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)');
+          if (colorSchemeQuery && colorSchemeQuery.addEventListener) {
+            colorSchemeQuery.addEventListener('change', reportBackgroundColor);
+          }
+          window.addEventListener('load', reportBackgroundColor);
+          window.addEventListener('transitionend', reportBackgroundColor);
+          window.addEventListener('animationend', reportBackgroundColor);
+          reportBackgroundColor();
+        })();
+      </script>
+    </body></html>
