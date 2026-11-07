@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Underground Cable Fault Detection - Presentation Edition</title>
+    <!-- استدعاء خط Tajawal العصري -->
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <!-- مكتبة الرسم البياني Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --bg-main: #060913;
+            --bg-card: #0f172a;
+            --bg-panel: #1e293b;
+            --border-color: #334155;
+            --accent-red: #ef4444;
+            --accent-blue: #3b82f6;
+            --accent-green: #10b981;
+            --accent-cyan: #06b6d4;
+            --accent-yellow: #f59e0b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        header {
+            background: linear-gradient(90deg, #0f172a 0%, #1e1b4b 100%);
+            border-bottom: 1px solid var(--border-color);
+            padding: 12px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
+
+        .header-title-box {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .badge-presentation {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid var(--accent-red);
+            color: var(--accent-red);
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        header h1 {
+            font-size: 1.3rem;
+            color: var(--text-main);
+            font-weight: 800;
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .serial-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(15, 23, 42, 0.8);
+            padding: 6px 14px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            font-size: 0.85rem;
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: var(--accent-red);
+            box-shadow: 0 0 8px var(--accent-red);
+            transition: 0.3s;
+        }
+
+        .status-dot.connected {
+            background-color: var(--accent-green);
+            box-shadow: 0 0 10px var(--accent-green);
+        }
+
+        .btn-fullscreen {
+            background-color: var(--accent-blue);
+            color: white;
+            border: none;
+            padding: 7px 15px;
+            border-radius: 6px;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-fullscreen:hover {
+            background-color: #2563eb;
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+        }
+
+        .main-container {
+            display: grid;
+            grid-template-columns: 340px 1fr;
+            gap: 18px;
+            padding: 18px;
+            flex: 1;
+            width: 100%;
+        }
+
+        @media (max-width: 1024px) {
+            .main-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+            margin-bottom: 15px;
+        }
+
+        .card h3 {
+            font-size: 1.05rem;
+            margin-bottom: 12px;
+            color: var(--accent-cyan);
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .form-group {
+            margin-bottom: 10px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+
+        .form-group select, .form-group input {
+            width: 100%;
+            padding: 8px 10px;
+            background-color: #090d16;
+            border: 1px solid var(--border-color);
+            color: #fff;
+            border-radius: 6px;
+            font-size: 0.88rem;
+        }
+
+        .form-group select:focus, .form-group input:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 9px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        .btn-primary { background-color: var(--accent-blue); color: white; }
+        .btn-primary:hover { background-color: #2563eb; }
+        
+        .btn-green { background-color: var(--accent-green); color: white; }
+        .btn-green:hover { background-color: #059669; }
+
+        .btn-danger { background-color: var(--accent-red); color: white; }
+        .btn-danger:hover { background-color: #dc2626; }
+
+        .dashboard-view {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .chart-wrapper {
+            position: relative;
+            height: 420px;
+            width: 100%;
+            background-color: #030712;
+            border-radius: 8px;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 12px;
+        }
+
+        .metric-box {
+            background-color: #090d16;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .metric-box::before {
+            content: '';
+            position: absolute;
+            top: 0; right: 0; width: 4px; height: 100%;
+            background-color: var(--accent-blue);
+        }
+
+        .metric-box.accent-red::before { background-color: var(--accent-red); }
+        .metric-box.accent-green::before { background-color: var(--accent-green); }
+        .metric-box.accent-yellow::before { background-color: var(--accent-yellow); }
+
+        .metric-box span {
+            display: block;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+        }
+
+        .metric-box h4 {
+            font-size: 1.3rem;
+            color: var(--text-main);
+            margin-top: 4px;
+            font-weight: 700;
+        }
+
+        .app-footer {
+            width: 100%;
+            background-color: #090d16;
+            border-top: 1px solid var(--border-color);
+            padding: 12px 25px;
+            margin-top: auto;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .designer-rights {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--accent-red);
+        }
+
+        .app-version {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-title-box">
+            <h1>مشروع كشف الأعطال في الكيبلات الأرضية (TDR)</h1>
+            <span class="badge-presentation">Presentation Edition</span>
+        </div>
+        <div class="header-controls">
+            <div class="serial-status">
+                <div id="statusDot" class="status-dot"></div>
+                <span id="statusText">غير متصل بالأردوينو</span>
+            </div>
+            <button class="btn-fullscreen" onclick="toggleFullScreen()">
+                🖥️ عرض ملء الشاشة (Presentation)
+            </button>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <!-- لوحة التحكم الجانبية -->
+        <aside>
+            <div class="card">
+                <h3>إعدادات الأردوينو (Web Serial)</h3>
+                <button id="connectSerialBtn" class="btn btn-primary">ربط أردوينو USB</button>
+            </div>
+
+            <div class="card">
+                <h3>محاكي الأعطال (TDR Simulator)</h3>
+                <div class="form-group">
+                    <label>نوع العطل</label>
+                    <select id="faultType">
+                        <option value="open">قطع في الكيبل (Open Circuit)</option>
+                        <option value="short">قصر دائرة (Short Circuit)</option>
+                        <option value="good">كيبل سليم (Matched Term)</option>
+                        <option value="water">تسرب مياه (Water Ingress)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>المسافة الفعلية للعطل (متر)</label>
+                    <input type="number" id="faultDistance" value="125" min="10" max="1000">
+                </div>
+                <div class="form-group">
+                    <label>نوع عزل الكيبل (VOP)</label>
+                    <select id="cableType">
+                        <option value="0.66">XLPE / PVC (VOP = 0.66c)</option>
+                        <option value="0.82">PILC - ورق مشبع (0.82c)</option>
+                        <option value="0.55">Coaxial (0.55c)</option>
+                    </select>
+                </div>
+                <button id="runSimulation" class="btn btn-green">تحديث الموجة والنبضة المترددة</button>
+            </div>
+
+            <div class="card">
+                <h3>أوامر التحكم والتقارير</h3>
+                <button id="sendSingleShot" class="btn btn-primary" style="margin-bottom: 8px;">إرسال نبضة مفردة (Single Shot)</button>
+                <button id="exportReport" class="btn btn-danger">طباعة التقرير الهندسي</button>
+            </div>
+        </aside>
+
+        <!-- منطقة العرض والرسومات -->
+        <main class="dashboard-view">
+            <div class="card" style="margin-bottom: 0;">
+                <h3>مخطط انعكاس الوقت التفاعلي (TDR Live Pulse Radar)</h3>
+                <div class="chart-wrapper">
+                    <canvas id="tdrChart"></canvas>
+                </div>
+            </div>
+
+            <div class="metrics-grid">
+                <div class="metric-box accent-red">
+                    <span>المسافة المقدرة للعطل</span>
+                    <h4 id="calcDistance">125.0 م</h4>
+                </div>
+                <div class="metric-box accent-yellow">
+                    <span>معامل الانعكاس (Rho)</span>
+                    <h4 id="calcRho">+1.00 (Open)</h4>
+                </div>
+                <div class="metric-box accent-green">
+                    <span>حالة الإشارة المتحركة</span>
+                    <h4 id="radarState">نبضة مترددة مستمرة 🔁</h4>
+                </div>
+                <div class="metric-box">
+                    <span>سرعة الانتشار (VOP)</span>
+                    <h4 id="vopDisplay">0.66 c</h4>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <footer class="app-footer">
+        <div class="footer-content">
+            <p class="designer-rights">
+                مصمم الموقع المهندس علي عماد عاجل
+            </p>
+            <p class="app-version">
+                مشروع كشف الأعطال في الكيبلات الأرضية TDR | جامعة الكوت
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        let tdrChart;
+        let serialPort;
+        let isSweeping = true;
+        let sweepPosition = 0;
+
+        function initChart() {
+            const ctx = document.getElementById('tdrChart').getContext('2d');
+            const dataPoints = 200;
+            const labels = Array.from({length: dataPoints}, (_, i) => (i * 5).toFixed(1));
+            
+            const data = {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'موجة الـ TDR المنعكسة',
+                        data: generateWaveform('open', 125),
+                        borderColor: '#38bdf8',
+                        borderWidth: 2,
+                        pointRadius: 0,
+                        tension: 0.1
+                    },
+                    {
+                        label: 'النبضة الضوئية المترددة (Radar Pulse)',
+                        data: Array(dataPoints).fill(null),
+                        borderColor: '#ef4444',
+                        borderWidth: 4,
+                        pointRadius: 5,
+                        pointBackgroundColor: '#ef4444',
+                        pointHoverRadius: 8
+                    }
+                ]
+            };
+
+            const config = {
+                type: 'line',
+                data: data,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            grid: { color: '#1e293b' },
+                            ticks: { color: '#94a3b8' },
+                            title: { display: true, text: 'المسافة (متر)', color: '#94a3b8' }
+                        },
+                        y: {
+                            grid: { color: '#1e293b' },
+                            ticks: { color: '#94a3b8' },
+                            min: -1.5,
+                            max: 1.5,
+                            title: { display: true, text: 'سعة الجهد (فولت)', color: '#94a3b8' }
+                        }
+                    },
+                    plugins: {
+                        legend: { labels: { color: '#f8fafc', font: { family: 'Tajawal' } } }
+                    }
+                }
+            };
+
+            tdrChart = new Chart(ctx, config);
+        }
+
+        function generateWaveform(type, faultDist) {
+            let points = [];
+            for(let i = 0; i < 200; i++) {
+                let dist = i * 5;
+                let val = 0;
+                if(i < 5) val = 1.0 * (1 - i/5);
+                
+                let distanceDiff = Math.abs(dist - faultDist);
+                if(distanceDiff < 10) {
+                    let factor = 1 - (distanceDiff / 10);
+                    if(type === 'open') val += 1.0 * factor;
+                    else if(type === 'short') val -= 1.0 * factor;
+                    else if(type === 'water') val += 0.4 * factor * Math.sin(i);
+                }
+                points.push(val);
+            }
+            return points;
+        }
+
+        function animateRadar() {
+            if(!isSweeping) return;
+            
+            let faultDist = parseFloat(document.getElementById('faultDistance').value);
+            let faultType = document.getElementById('faultType').value;
+            
+            let sweepData = Array(200).fill(null);
+            let targetIdx = Math.round(faultDist / 5);
+            
+            // حساب حركة النبضة المترددة (ذهاب وإياب مستمر)
+            let currentIdx = Math.floor((Math.sin(Date.now() / 350) + 1) / 2 * targetIdx);
+            sweepData[currentIdx] = faultType === 'short' ? -1.1 : 1.1;
+
+            tdrChart.data.datasets[0].data = generateWaveform(faultType, faultDist);
+            tdrChart.data.datasets[1].data = sweepData;
+            tdrChart.update('none');
+
+            requestAnimationFrame(animateRadar);
+        }
+
+        function toggleFullScreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen();
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                }
+            }
+        }
+
+        document.getElementById('runSimulation').addEventListener('click', () => {
+            const fType = document.getElementById('faultType').value;
+            const dist = document.getElementById('faultDistance').value;
+            const vop = document.getElementById('cableType').value;
+            
+            document.getElementById('calcDistance').innerText = dist + " م";
+            document.getElementById('vopDisplay').innerText = vop + " c";
+            document.getElementById('calcRho').innerText = fType === 'open' ? "+1.00 (Open)" : fType === 'short' ? "-1.00 (Short)" : "+0.35 (Water)";
+        });
+
+        document.getElementById('connectSerialBtn').addEventListener('click', async () => {
+            try {
+                serialPort = await navigator.serial.requestPort();
+                await serialPort.open({ baudRate: 9600 });
+                document.getElementById('statusText').innerText = "متصل بنجاح بالأردوينو";
+                document.getElementById('statusDot').classList.add('connected');
+            } catch (err) {
+                alert('عذراً، لم يتم اختيار منفذ USB أو أن المتصفح لا يدعم الميزة.');
+            }
+        });
+
+        document.getElementById('exportReport').addEventListener('click', () => {
+            window.print();
+        });
+
+        window.onload = () => {
+            initChart();
+            animateRadar();
+        };
+    </script>
+</body>
+</html>
